@@ -1,5 +1,5 @@
 from models1.user import User
-
+1
 #1
 class ApplicationData:
     def __init__(self):

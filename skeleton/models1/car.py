@@ -1,21 +1,21 @@
-class Car:
-    MAKE_LEN_MIN = 2
-    MAKE_LEN_MAX = 15
-    MAKE_LEN_ERR = f'Make must be between {MAKE_LEN_MIN} and {MAKE_LEN_MAX} characters long!'
+from models1.vehicle import Vehicle
 
-    MODEL_LEN_MIN = 1
-    MODEL_LEN_MAX = 15
-    MODEL_LEN_ERR = f'Model must be between {MODEL_LEN_MIN} and {MODEL_LEN_MAX} characters long!'
+class Car(Vehicle):
+    def __init__(self, make, model, price: float, seats:int, wheels=4):
+        super().__init__(make, model, price, wheels)
+        self.seats = seats
 
-    PRICE_MIN = 0
-    PRICE_MAX = 1000000
-    PRICE_ERR = f'Price must be between {PRICE_MIN:.1f} and {PRICE_MAX:.2f}!'
 
-    CAR_SEATS_MIN = 1
-    CAR_SEATS_MAX = 10
-    CAR_SEATS_ERR = f'Seats must be between {CAR_SEATS_MIN} and {CAR_SEATS_MAX}!'
+    @property
+    def seats(self):
+        return self._seats
 
-    WHEELS_COUNT = 4
+    @seats.setter
+    def seats(self, seats_num: int):
+        if seats_num < 1 or seats_num > 10:
+            raise ValueError("Seats must be between 1 and 10!")
+        self._seats = seats_num
+
 
     # Todo: Finish the implementation
     # Names of methods/attributes should be exactly match those in the README file

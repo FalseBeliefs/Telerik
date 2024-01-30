@@ -1,9 +1,8 @@
 from models1.user import User
-1
-#1
+
 class ApplicationData:
     def __init__(self):
-        self._users = []
+        self._users: list[User] = []
         self._logged_user = None
 
     @property

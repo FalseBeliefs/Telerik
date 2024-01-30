@@ -1,19 +1,22 @@
-class Truck:
-    MAKE_LEN_MIN = 2
-    MAKE_LEN_MAX = 15
-    MAKE_LEN_ERR = f'Make must be between {MAKE_LEN_MIN} and {MAKE_LEN_MAX} characters long!'
+from models1.vehicle import Vehicle
 
-    MODEL_LEN_MIN = 1
-    MODEL_LEN_MAX = 15
-    MODEL_LEN_ERR = f'Model must be between {MODEL_LEN_MIN} and {MODEL_LEN_MAX} characters long!'
+class Truck(Vehicle):
+    def __init__(self, make, model, price: float, weight_capacity, wheels=8):
+        super().__init__(make, model, price, wheels)
+        self.weight_capacity = weight_capacity
 
-    PRICE_MIN = 0
-    PRICE_MAX = 1000000
-    PRICE_ERR = f'Price must be between {PRICE_MIN:.1f} and {PRICE_MAX:.2f}!'
 
-    WEIGHT_CAP_MIN = 1
-    WEIGHT_CAP_MAX = 100
-    WEIGHT_CAP_ERR = f'Weight capacity must be between {WEIGHT_CAP_MIN} and {WEIGHT_CAP_MAX}!'
+    @property
+    def weight_capacity(self):
+        return self._weight_capacity
+
+    @weight_capacity.setter
+    def weight_capacity(self, weight_cap):
+        if weight_cap < 1 or weight_cap > 100:
+            raise ValueError('Weight capacity must be between 1} and 100!')
+        self._weight_capacity = weight_cap
+
+
 
     WHEELS_COUNT = 8
 

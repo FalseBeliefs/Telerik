@@ -4,6 +4,7 @@ from models1.car import Car
 from models1.motorcycle import Motorcycle
 from models1.constants.vehicle_type import VehicleType
 from models1.truck import Truck
+from models1.vehicle import Vehicle
 
 
 class AddVehicleCommand(BaseCommand):
@@ -25,7 +26,7 @@ class AddVehicleCommand(BaseCommand):
     def _expected_params_count(self) -> int:
         return 5
 
-    def _create_vehicle(self, params) -> VehicleType:
+    def _create_vehicle(self, params) -> Vehicle:
         type, make, model, price, *rest = params
         price = self._try_parse_float(
             price, 'Invalid value for price. Should be a number.')

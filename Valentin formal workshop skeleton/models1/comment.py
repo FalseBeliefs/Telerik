@@ -20,4 +20,3 @@ class Comment:
     # Todo: Finish the implementation
     # Names of methods/attributes should be exactly match those in the README file
 
-    1

@@ -16,10 +16,12 @@ class BaseCommand:
         return ''
 
     def _requires_login(self) -> bool:
-        raise NotImplementedError('Override in derived class')
+        if not self._app_data.logged_in_user:
+            return False
+        return True
 
     def _expected_params_count(self) -> int:
-        raise NotImplementedError('Override in derived class')
+        return 0            #?
 
     def _try_parse_float(self, s, msg='Invalid value. Expected a float.'):
         try:

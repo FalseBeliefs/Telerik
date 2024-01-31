@@ -1,6 +1,6 @@
 from commands1.base_command import BaseCommand
 from core.application_data import ApplicationData
-
+from models1.comment import Comment
 
 class AddCommentCommand(BaseCommand):
     def __init__(self, app_data: ApplicationData):
@@ -14,9 +14,10 @@ class AddCommentCommand(BaseCommand):
 
         user = self._app_data.find_user_by_username(username)
         vehicle = user.get_vehicle(self._try_parse_int(car_id) - 1)
+        comment = Comment(comment_text, self._app_data.logged_in_user.username)
 
         logged_user = self._app_data.logged_in_user
-        logged_user.add_comment(comment_text, vehicle)
+        logged_user.add_comment(comment, vehicle)
 
         return f'{logged_user.username} added comment successfully!'
 

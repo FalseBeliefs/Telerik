@@ -32,5 +32,9 @@ class CommandFactory:
             return RemoveCommentCommand(self._app_data)
         if cmd_name.upper() == 'REMOVEVEHICLE':
             return RemoveVehicleCommand(self._app_data)
+        #match cmd_name.upper():
+        #    case "LOGIN":
+        #        return LoginCommand(self._app_data)
 
         raise ValueError('Invalid command name')
+

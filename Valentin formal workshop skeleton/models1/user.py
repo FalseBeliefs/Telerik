@@ -1,6 +1,6 @@
-from models1.comment import Comment
 from models1.constants.user_role import UserRole
 from models1.vehicle import Vehicle
+from models1.comment import Comment
 
 
 class User:
@@ -17,9 +17,11 @@ class User:
             self.is_admin = False
 
         self.vehicle_limit = 5
-        self.vehicles: list[Vehicle] = []
+        self._vehicles: list[Vehicle] = []
 
-        print(f"Username: {self.username}, FullName: {self.firstname} {self.lastname}, Role: {self.user_role}")
+    @property
+    def vehicles(self):
+        return tuple(self._vehicles)
 
     @property
     def username(self):
@@ -69,49 +71,48 @@ class User:
             raise ValueError("Password contains invalid symbols!")
 
     def get_vehicle(self, index: int) -> Vehicle:
-        if index > len(self.vehicles) - 1:
-            raise ValueError("Vehicle index out of range!")
-        return self.vehicles[index]
+        if index > len(self._vehicles) - 1:
+            raise ValueError("The vehicle does not exist!")
+        return self._vehicles[index]
 
     def add_vehicle(self, vehicle: Vehicle):
         if self.is_admin:
             raise ValueError('You are an admin and therefore cannot add vehicles!')
-        if len(self.vehicles) > 4 and self.user_role != UserRole.VIP:
-            raise ValueError(f'You are not VIP and cannot add more than 5 vehicles')
-        self.vehicles.append(vehicle)
+        if len(self._vehicles) > 4 and self.user_role != UserRole.VIP:
+            raise ValueError(f'You are not VIP and cannot add more than 5 vehicles!')
+        self._vehicles.append(vehicle)
 
     def remove_vehicle(self, vehicle: Vehicle):
-        if vehicle in self.vehicles:
-            self.vehicles.remove(vehicle)
+        if vehicle in self._vehicles:
+            self._vehicles.remove(vehicle)
             return f"{self.username} removed vehicle successfully!"
 
-
     def print_vehicles(self):
-        user = f"--USER {self.username}--"
-        vehicle_info = []
-        if len(self.vehicles) > 0:
-            for vehicle in self.vehicles:
-                vehicle_info.append(f"""Make: {vehicle.make}
-                Model: {vehicle.model}
-                Wheels: {vehicle.wheels}
-                Price: ${vehicle.price}""")
+        if len(self._vehicles) == 0:
+            return f"--USER {self.username}--\n--NO VEHICLES--"
         else:
-            vehicle_info = "--NO VEHICLES--"
-            return f"{user}\n{vehicle_info}"
-        return f"{user}"+"\n"+f"{"\n".join(vehicle_info)}"
+            result = f"--USER {self.username}--\n"
+            vehicles = []
+            num = 1
+            for vehicle in self._vehicles:
+                vehicles.append(f"{num}. {vehicle}")
+                num += 1
+            all_vehicles = "\n".join(vehicles)
+            return f"{result}{all_vehicles}"
 
-    def remove_comment(self, author):
-        pass
+    def remove_comment(self, comment: Comment, vehicle: Vehicle):
+        if comment.author != self.username:
+            raise ValueError("You are not the author of the comment you are trying to remove!")
+        if comment not in vehicle.comments:
+            raise ValueError("That comment does not exist!")
+        vehicle.remove_comment(comment)
 
-    def add_comment(self, comment):
-        pass
+    def add_comment(self, comment: Comment, vehicle: Vehicle):
+        vehicle.add_comment(comment)
 
-    NORMAL_ROLE_VEHICLE_LIMIT = 5
 
-    NORMAL_USER_LIMIT_REACHED_ERR = f'You are not VIP and cannot add more than {NORMAL_ROLE_VEHICLE_LIMIT} vehicles!'
-    ADMIN_CANNOT_ADD_VEHICLES_ERR = 'You are an admin and therefore cannot add vehicles!'
-    YOU_ARE_NOT_THE_AUTHOR = 'You are not the author of the comment you are trying to remove!'
-    THE_VEHICLE_DOES_NOT_EXIT = 'The vehicle does not exist!'
+    def __str__(self):
+        return f"Username: {self.username}, FullName: {self.firstname} {self.lastname}, Role: {self.user_role}"
 
     # Todo: Finish the implementation
     # Names of methods/attributes should be exactly match those in the README file
